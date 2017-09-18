@@ -34,12 +34,16 @@ Tiide Config includes information about the users dev env.
 
 Example configuration (".tiide.el content"):
 
-    '(
-        (tiide-compdir . ".")
-        (tiide-compile . "rake test:all")
-        (tiide-gdbinit . ".gdbinit")
-        (tiide-include . ("src" "test" "vendor/ceedling/vendor/unity/src"))
-        )
+    (list
+       '(tiide-compdir . ".")
+       '(tiide-compile . "rake test:all")
+       '(tiide-gdbinit . ".gdbinit")
+       (cons 'tiide-include (list
+                               "src"
+                               "test"
+                               "vendor/ceedling/vendor/unity/src"
+                               (format "%s/usr/include" (getenv "HOME"))))
+       )
 
 This configuration is for a project that uses Ceedling for
 testing. "src" include source files and tests are in "test" directory.
@@ -53,14 +57,16 @@ The configuration specifies:
 * ".gdbinit" file is in the Root directory,
 
 * project include files are in "<root>/src", "<root>/test", and
-  "<root>/vendor/ceedling/vendor/unity/src" directories.
+  "<root>/vendor/ceedling/vendor/unity/src" directories. There are
+  additional includes taken from users home directory.
 
 "tiide-compdir" and "tiide-compile" are used by "compile"
 command. "tiide-gdbinit" is used by "gud-gdb".
 
 "tiide-include" is used by "c-eldoc" indirectly. Tiide updates
 "c-eldoc-includes" variable before the function prototype lookup is
-performed. User should setup the base includes to
+performed. Relative paths are extended with Project Root, and absolute
+paths are used as is. User should setup the base includes to
 "tiide-c-eldoc-include-base" variable, for example in ".emacs":
 
     (setq tiide-c-eldoc-include-base "`pkg-config gtk+-2.0 --cflags` -I./ -I../")

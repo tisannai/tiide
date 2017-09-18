@@ -176,5 +176,14 @@
            (line (line-number-at-pos)))
       (kill-new (format "%s:%d" name line))))
 
+(defun tiide-insert-config-template ()
+   "Insert a template config file \".tiide.el\" to the current buffer."
+   (interactive)
+   (insert "(list
+   '(tiide-compdir . \".\")
+   '(tiide-compile . \"rake test:all\")
+   '(tiide-gdbinit . \".gdbinit\")
+   (cons 'tiide-include (list \"src\" (format \"%s/usr/include\" (getenv \"HOME\"))))
+   )" ))
 
 (provide 'tiide)

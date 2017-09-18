@@ -12,7 +12,7 @@ Project Root directory is identified by placing ".tiide.el" file to
 the root directory. ".tiide.el" is called Tiide Config. Tiide Project
 covers all files below the Project Root.
 
-Tiide provides following commands:
+Tiide provides following commands (among others):
 
 * tiide-refresh: update Tiide Config cache after editing ".tiide.el".
 

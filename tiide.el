@@ -100,7 +100,9 @@
                            (mapconcat 'identity
                               (mapcar
                                  (lambda (i)
-                                    (format "-I%s/%s" root i))
+                                    (if (string-match "^[a-zA-Z]" i)
+                                       (format "-I%s/%s" root i)
+                                       (format "-I%s" i)))
                                  (cdr (assoc 'tiide-include config))) " "))))))
          nil)))
 

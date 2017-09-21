@@ -160,6 +160,14 @@
          (find-file (cdr (assoc 'tiide-gdbinit-file config))))))
 
 
+(defun tiide-edit-config ()
+   "Edit .tiide.el file."
+   (interactive)
+   (let ((root (tiide-find-root)))
+      (if root
+         (find-file (format "%s/.tiide.el" root)))))
+
+
 (defun tiide-build ()
    "Build/compile based on Tiide config."
    (interactive)

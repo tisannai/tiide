@@ -18,17 +18,20 @@ Tiide provides following commands (among others):
 
 * tiide-debug: run gud-gdb with Project's ".gdbinit" file.
 
-* tiide-edit: open Project's ".gdbinit" for editing.
+* tiide-edit-init: open Project's ".gdbinit" for editing.
 
 * tiide-build: build Project.
+
+* tiide-edit-config: open Project's Config for editing.
 
 
 User is advised to map these commands directly to keys. For example:
 
     (global-set-key (kbd "C-x 4 u") 'tiide-build)
     (global-set-key (kbd "C-x 4 g") 'tiide-debug)
-    (global-set-key (kbd "C-x 4 e") 'tiide-edit)
+    (global-set-key (kbd "C-x 4 e") 'tiide-edit-init)
     (global-set-key (kbd "C-x 4 i") 'tiide-get-breakpoint)
+    (global-set-key (kbd "C-x 4 t") 'tiide-edit-config)
 
 Tiide Config includes information about the users dev env.
 

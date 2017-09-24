@@ -35,7 +35,7 @@
 ;;   tiide-refresh      - Update Tiide Config (after ".tiide.el" edit).
 ;;   tiide-build        - Build project.
 ;;   tiide-debug        - Start GDB within Emacs.
-;;   tiide-edit-init    - Edit project's .gdbinit file in Emacs.
+;;   tiide-edit-gdbinit - Edit project's .gdbinit file in Emacs.
 ;;   tiide-edit-config  - Edit project's Config file in Emacs.
 ;;
 ;; Suggested global key bindings:
@@ -171,7 +171,7 @@ in order to refresh cache for the current project.")
          (gud-gdb (format "gdb --fullname -nx -x %s" (aget 'tiide-gdbinit-file config))))))
 
 
-(defun tiide-edit-init ()
+(defun tiide-edit-gdbinit ()
    "Edit .gdbinit file specified in Tiide config."
    (interactive)
    (let ((config (tiide-get-config)))
@@ -202,7 +202,21 @@ in order to refresh cache for the current project.")
    (interactive)
    (let ((name (buffer-name (current-buffer)))
            (line (line-number-at-pos)))
-      (kill-new (format "%s:%d" name line))))
+      (kill-new (format "%s:%d" name line))
+      (let ((config (tiide-get-config)))
+         (if config
+            (if (file-exists-p (aget 'tiide-gdbinit-file config))
+               (progn
+                  (find-file (aget 'tiide-gdbinit-file config))
+                  (end-of-buffer)
+                  (if (search-backward-regexp "^run")
+                     (progn
+                        (beginning-of-line)
+                        (forward-line -1)
+                        (insert (format "break %s\n" (car kill-ring)))
+                        (save-buffer)
+                        ))
+                  (switch-to-buffer name)))))))
 
 
 (defun tiide-insert-config-template ()
@@ -214,6 +228,25 @@ in order to refresh cache for the current project.")
    '(tiide-gdbinit . \".gdbinit\")
    (cons 'tiide-include (list \"src\" (format \"%s/usr/include\" (getenv \"HOME\"))))
    )" ))
+
+
+(defun tiide-create-gdbinit-template ()
+   "Insert a template config file \".gdbinit\" to configured location."
+   (interactive)
+   (let ((config (tiide-get-config)))
+      (if config
+         (if (file-exists-p (aget 'tiide-gdbinit config))
+            (message "You already have .gdbinit... no operation performed...")
+            (progn
+               (find-file (aget 'tiide-gdbinit config))
+               (insert "file <path-to-bin>
+set args <cmd-line-args>
+
+break main
+
+run
+"
+                  ))))))
 
 
 (provide 'tiide)

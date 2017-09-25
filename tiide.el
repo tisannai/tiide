@@ -41,7 +41,7 @@
 ;; Suggested global key bindings:
 ;;   (global-set-key (kbd "C-x 4 u") 'tiide-build)
 ;;   (global-set-key (kbd "C-x 4 g") 'tiide-debug)
-;;   (global-set-key (kbd "C-x 4 e") 'tiide-edit)
+;;   (global-set-key (kbd "C-x 4 e") 'tiide-edit-gdbinit)
 ;;   (global-set-key (kbd "C-x 4 i") 'tiide-get-breakpoint)
 ;;   (global-set-key (kbd "C-x 4 t") 'tiide-edit-config)
 
@@ -200,7 +200,7 @@ in order to refresh cache for the current project.")
 (defun tiide-get-breakpoint ()
    "Storage current buffer and line info to yank buffer."
    (interactive)
-   (let ((name (buffer-name (current-buffer)))
+   (let ((name (file-name-nondirectory (buffer-name (current-buffer))))
            (line (line-number-at-pos)))
       (kill-new (format "%s:%d" name line))
       (let ((config (tiide-get-config)))

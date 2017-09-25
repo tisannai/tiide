@@ -18,7 +18,7 @@ Tiide provides following commands (among others):
 
 * tiide-debug: run gud-gdb with Project's ".gdbinit" file.
 
-* tiide-edit-init: open Project's ".gdbinit" for editing.
+* tiide-edit-gdbinit: open Project's ".gdbinit" for editing.
 
 * tiide-build: build Project.
 
@@ -29,7 +29,7 @@ User is advised to map these commands directly to keys. For example:
 
     (global-set-key (kbd "C-x 4 u") 'tiide-build)
     (global-set-key (kbd "C-x 4 g") 'tiide-debug)
-    (global-set-key (kbd "C-x 4 e") 'tiide-edit-init)
+    (global-set-key (kbd "C-x 4 e") 'tiide-edit-gdbinit)
     (global-set-key (kbd "C-x 4 i") 'tiide-get-breakpoint)
     (global-set-key (kbd "C-x 4 t") 'tiide-edit-config)
 
@@ -50,37 +50,38 @@ Example configuration (".tiide.el content"):
                                (format "%s/usr/include" (getenv "HOME"))))
        )
 
-Configuration is a list of cons cells, i.e. a association list.
+Configuration is a list of cons cells, i.e. an association list.
 
 This configuration is for a project that uses Ceedling for
-testing. "src" include source files and tests are in "test" directory.
+testing. "src" includes source files and tests are in "test"
+directory.
 
 The configuration specifies:
 
-* compilation is performed at Root directory, and
+* compilation is performed at Root directory,
 
 * compilation is performed with "rake test:all" command,
 
-* ".gdbinit" file is in the Root directory,
+* ".gdbinit" file is in the Root directory, and
 
 * project include files are in "<root>/src", "<root>/test", and
   "<root>/vendor/ceedling/vendor/unity/src" directories. There are
-  additional includes taken from users home directory.
+  also additional includes taken from users home directory.
 
-"tiide-compdir" and "tiide-compile" are used by "compile"
+"tiide-compdir" and "tiide-compile" are used by Emacs "compile"
 command. "tiide-gdbinit" is used by "gud-gdb".
 
 "tiide-include" is used by "c-eldoc" indirectly. Tiide updates
-"c-eldoc-includes" variable before the function prototype lookup is
+"c-eldoc-includes" variable before the function signature lookup is
 performed. Relative paths are extended with Project Root, and absolute
-paths are used as is. User should setup the base includes to
-"tiide-c-eldoc-include-base" variable, for example in ".emacs":
+paths are used as is. User should list common includes in
+"tiide-c-eldoc-include-base" variable (e.g. in ".emacs"):
 
     (setq tiide-c-eldoc-include-base "`pkg-config gtk+-2.0 --cflags` -I./ -I../")
 
-The base is augmented with Project specific "-I" entries. This ensures
-that all function prototypes are found by "c-eldoc" within the
-Project.
+Variable is augmented by Tiide with Project specific "-I"
+entries. This ensures that all function signatures are found by
+"c-eldoc" within the Project.
 
 
 Tiide library by Tero Isannainen, (c) Copyright 2017.

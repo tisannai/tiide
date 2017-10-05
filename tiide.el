@@ -87,6 +87,13 @@ in order to refresh cache for the current project.")
    (cdr (assoc key list)))
 
 
+(defun tiide-eldoc-ctrl (active)
+   "Enable or disable eldoc mode."
+   (if active
+      (eldoc-mode 1)
+      (eldoc-mode -1)))
+
+
 (defun tiide-get-config-from-file ()
    "Get all information related to Tiide env."
    (let ((root (tiide-find-root))
@@ -125,6 +132,7 @@ in order to refresh cache for the current project.")
          (setq config (tiide-get-config-from-file))
          (if config
             (progn
+               (tiide-eldoc-ctrl (aget 'tiide-doeldoc config))
                (make-local-variable 'tiide-config)
                (setq tiide-config (intern (aget 'tiide-root config)))
                (unless (aget tiide-config tiide-config-cache)
@@ -157,6 +165,7 @@ in order to refresh cache for the current project.")
          (progn
             (unless (local-variable-p 'tiide-config)
                (make-local-variable 'tiide-config))
+            (tiide-eldoc-ctrl (aget 'tiide-doeldoc config))
             (setq tiide-config (intern (aget 'tiide-root config)))
 
             ;; Search the old config by root info and store to rem.
@@ -231,6 +240,7 @@ in order to refresh cache for the current project.")
    (insert "(list
    '(tiide-compdir . \".\")
    '(tiide-compile . \"rake test:all\")
+   '(tiide-doeldoc . t)
    '(tiide-gdbinit . \".gdbinit\")
    (cons 'tiide-include (list \"src\" (format \"%s/usr/include\" (getenv \"HOME\"))))
    )" ))

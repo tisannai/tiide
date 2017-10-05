@@ -151,16 +151,22 @@ in order to refresh cache for the current project.")
 (defun tiide-refresh ()
    "Update Tiide Config after config file edit."
    (interactive)
-   (let ((config nil))
+   (let ((config nil) (rem nil) (cache nil))
       (setq config (tiide-get-config-from-file))
       (if config
          (progn
             (unless (local-variable-p 'tiide-config)
                (make-local-variable 'tiide-config))
             (setq tiide-config (intern (aget 'tiide-root config)))
-            (delq (assoc tiide-config tiide-config-cache) tiide-config-cache)
-            (setq tiide-config-cache
-               (append tiide-config-cache (list (cons tiide-config config))))))))
+
+            ;; Search the old config by root info and store to rem.
+            (seq-each
+               '(lambda (item)
+                   (unless (equal (intern (aget 'tiide-root item)) tiide-config)
+                      (setq cache (append cache (list item)))))
+               tiide-config-cache)
+
+            (setq tiide-config-cache (append cache (list (cons tiide-config config))))))))
 
 
 (defun tiide-debug ()

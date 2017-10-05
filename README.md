@@ -1,16 +1,21 @@
 # Tiide
 
 Tiide is a minimalistic C language IDE for Emacs. It integrates
-c-eldoc, compile and gud-gdb packages as users C project development.
+c-eldoc, compile and gud-gdb packages as C project development
+environment.
 
-Tiide enables user to launch compilation and debugger from the current
-buffer. Current buffer is under Tiide Project Root in directory
-hierarhcy. Tiide finds the Project Root by traveling up in directory
-hierarchy from the file of current buffer.
+Tiide enables the user to use all features of Tiide from any buffer
+that exists within the Tiide Project hierarchy. User can stay in the
+current buffer (and within Emacs) for all basic iterations regarding
+program development: edit, (re-config), compile, run/debug.
+
+Current buffer is under Tiide Project Root, in directory
+hierarchy. Tiide finds the Project Root by traveling up in directory
+hierarchy from the directory that includes the file of current buffer.
 
 Project Root directory is identified by placing ".tiide.el" file to
-the Root directory. ".tiide.el" is called Tiide Config. Tiide Project
-contains all files below the Project Root.
+Root directory. ".tiide.el" is called Tiide Config. Tiide Project
+contains all files recursively under Project Root.
 
 Tiide provides following commands (among others):
 

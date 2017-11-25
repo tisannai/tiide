@@ -259,6 +259,8 @@ in order to refresh cache for the current project.")
                     (insert "file <path-to-bin>
 set args <cmd-line-args>
 
+set breakpoint pending on
+
 break main
 
 run
